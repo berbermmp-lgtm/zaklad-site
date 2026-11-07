@@ -34,4 +34,29 @@
 document.querySelectorAll('.project').forEach(b=>b.addEventListener('click',()=>{document.querySelector('#project-title').textContent=b.dataset.project.toUpperCase();document.querySelector('#project-text').textContent=b.dataset.detail;document.querySelectorAll('.project').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))}));
 const slider=document.querySelector('#area-slider');function calc(){const n=Number(slider.value);const idx=n<=20?0:n<=40?1:n<=60?2:3;const services=['$2 800','$3 300','$3 600','$4 800'],invest=['$10 000–18 000','$15 000–25 000','$20 000–40 000','$35 000–65 000'];document.querySelector('#area-label').textContent=n+' м²';document.querySelector('#service-price').textContent=services[idx];document.querySelector('#investment-price').textContent=invest[idx]}slider.addEventListener('input',calc);calc();
 function show(txt){let e=document.querySelector('#contact-result');e.classList.add('show');e.replaceChildren();let p=document.createElement('div');p.textContent=txt;e.appendChild(p)}document.querySelector('#contact-form').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;if(!f.reportValidity())return;const data=new FormData(f);const msg='Заявка із сайту ЗАКЛАД.\nІм’я: '+data.get('name')+'\nКонтакт: '+data.get('contact')+'\nПослуга: '+data.get('format')+'\nКоментар: '+(data.get('message')||'—');try{await navigator.clipboard.writeText(msg);show('Звернення скопійовано. Тепер його можна надіслати менеджеру, коли будуть контакти.')}catch{show('Скопіюй підготовлене звернення нижче:');const t=document.createElement('textarea');t.value=msg;t.readOnly=true;document.querySelector('#contact-result').appendChild(t);t.focus();t.select()}})})();
-</script></body></html>
+</script>
+<!-- anti-clump: жодного негативного трекінгу (літери не злипаються) -->
+<script>
+(function(){
+  var MIN = 0.01; // мінімальний просвіт в em
+  function fix(){
+    var nodes = document.querySelectorAll('body *');
+    for (var i=0;i<nodes.length;i++){
+      var el = nodes[i];
+      if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'SVG' || el.closest('svg')) continue;
+      var cs = getComputedStyle(el);
+      var ls = parseFloat(cs.letterSpacing);
+      if (ls < 0){
+        var fs = parseFloat(cs.fontSize) || 16;
+        el.style.setProperty('letter-spacing', (fs*MIN).toFixed(2)+'px', 'important');
+      }
+      var ws = parseFloat(cs.wordSpacing);
+      if (ws < 0) el.style.setProperty('word-spacing', '0px', 'important');
+    }
+  }
+  if (document.readyState !== 'loading') fix(); else document.addEventListener('DOMContentLoaded', fix);
+  window.addEventListener('load', fix);
+  setTimeout(fix, 1200);
+})();
+</script>
+</body></html>
